@@ -303,31 +303,30 @@ class Game:
     # Drawing
     # ─────────────────────────────────────────────────────────────────────────
 
-def _draw_game(self):
-    self.screen.fill(DARK_BG)
+    def _draw_game(self):
+        self.screen.fill(DARK_BG)
 
-    self.maze.draw(self.screen, self.camera)
+        self.maze.draw(self.screen, self.camera)
 
-    tx, ty = self.camera.world_to_screen(self._tx, self._ty)
-    self.screen.blit(self._treasure_sprite, (tx, ty))
+        tx, ty = self.camera.world_to_screen(self._tx, self._ty)
+        self.screen.blit(self._treasure_sprite, (tx, ty))
 
-    self.enemy.draw(self.screen, self.camera)
-    self.player.draw(self.screen, self.camera)
+        self.enemy.draw(self.screen, self.camera)
+        self.player.draw(self.screen, self.camera)
 
-    self.hud.draw(self.screen, self._elapsed, self.level)
+        self.hud.draw(self.screen, self._elapsed, self.level)
 
-    # 🔥 PLAYER SCREEN POS FOR LIGHTING
-    player_sx, player_sy = self.camera.world_to_screen(
-        self.player.px,
-        self.player.py
-    )
+        # 🔥 PLAYER SCREEN POS FOR LIGHTING
+        player_sx, player_sy = self.camera.world_to_screen(
+            self.player.px,
+            self.player.py
+        )
 
-    # 🌫️ FOG OF WAR
-    self.camera.apply_lighting(
-        self.screen,
-        (player_sx, player_sy)
-    )
-
+        # 🌫️ FOG OF WAR
+        self.camera.apply_lighting(
+            self.screen,
+            (player_sx, player_sy)
+        )
 
     # ─────────────────────────────────────────────────────────────────────────
     # Main loop
