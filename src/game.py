@@ -304,22 +304,29 @@ class Game:
     # ─────────────────────────────────────────────────────────────────────────
 
     def _draw_game(self):
-        """Render the live game state (maze + entities + HUD) via camera."""
         self.screen.fill(DARK_BG)
-        
-        # Maze blitted with camera offset
+
         self.maze.draw(self.screen, self.camera)
 
-        # Treasure / goal tile translated from world to screen
         tx, ty = self.camera.world_to_screen(self._tx, self._ty)
         self.screen.blit(self._treasure_sprite, (tx, ty))
 
-        # Entities draw using camera for translation
         self.enemy.draw(self.screen, self.camera)
         self.player.draw(self.screen, self.camera)
 
-        # HUD on top of everything (static screen coordinates)
         self.hud.draw(self.screen, self._elapsed, self.level)
+
+        # 🔥 PLAYER SCREEN POS FOR LIGHTING
+        player_sx, player_sy = self.camera.world_to_screen(
+            self.player.px,
+            self.player.py
+        )
+
+        # 🌫️ FOG OF WAR
+        self.camera.apply_lighting(
+            self.screen,
+            (player_sx, player_sy)
+        )
 
     # ─────────────────────────────────────────────────────────────────────────
     # Main loop

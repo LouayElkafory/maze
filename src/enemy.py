@@ -107,3 +107,5 @@ class Enemy:
     @property
     def grid_pos(self) -> tuple:
         return (self.col, self.row)
+
+    #-----

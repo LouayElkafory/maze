@@ -11,15 +11,15 @@ ASSETS_DIR = os.path.join(BASE_DIR, "assets")
 SOUNDS_DIR = os.path.join(BASE_DIR, "sounds")
 
 # ─── Display ──────────────────────────────────────────────────────────────────
-TILE_SIZE  = 40           # pixels per maze cell
+TILE_SIZE  = 70           # pixels per maze cell (increased from 40)
 COLS       = 15           # maze columns
 ROWS       = 15           # maze rows
-MAZE_W     = COLS * TILE_SIZE   # 600 px
-MAZE_H     = ROWS * TILE_SIZE   # 600 px
-MAZE_OFF_X = 50           # horizontal padding around the maze
-MAZE_OFF_Y = 72           # top bar height (used for HUD)
-SCREEN_W   = MAZE_W + 2 * MAZE_OFF_X   # 700 px
-SCREEN_H   = MAZE_H + MAZE_OFF_Y + 28  # 700 px
+MAZE_W     = COLS * TILE_SIZE   # 1050 px
+MAZE_H     = ROWS * TILE_SIZE   # 1050 px
+MAZE_OFF_X = 75           # horizontal padding around the maze
+MAZE_OFF_Y = 100          # top bar height (used for HUD)
+SCREEN_W   = MAZE_W + 2 * MAZE_OFF_X   # 1200 px
+SCREEN_H   = MAZE_H + MAZE_OFF_Y + 40  # 1190 px
 FPS        = 60
 
 # ─── Colours ──────────────────────────────────────────────────────────────────
