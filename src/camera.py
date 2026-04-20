@@ -1,11 +1,13 @@
 """
 camera.py
 Scroll camera + lighting system (Fog of War) for Curse of the Pyramids.
+Enhanced with smoother easing and improved viewport handling.
 """
 
 import pygame
 import random
-from src.constants import SCREEN_W, SCREEN_H, MAZE_OFF_Y
+import math
+from src.constants import SCREEN_W, SCREEN_H, MAZE_OFF_Y, TILE_SIZE
 
 # ── Viewport ────────────────────────────────────────────────────────────────
 VP_LEFT = 0
@@ -22,48 +24,61 @@ class Camera:
 
         self.cam_x = 0.0
         self.cam_y = 0.0
+        self.target_x = 0.0
+        self.target_y = 0.0
 
         # centering offset when maze is smaller than screen
         self._mx = max(0, (VP_W - world_w) // 2)
         self._my = max(0, (VP_H - world_h) // 2)
 
-        # ── Lighting system (Fog of War) ────────────────────────────────
+        # ── Camera easing (smoother follow) ────────────────────────────
+        self.easing_factor = 0.10  # Lower = smoother follow (0.05-0.15)
+
+        # ── Lighting system (Fog of War) - scaled for bigger tiles ─────
         self.darkness = pygame.Surface((VP_W, VP_H), pygame.SRCALPHA)
 
-        self.light_radius = 140        # inner visible area
-        self.soft_radius  = 220        # fade area
+        # Scale lighting radii with tile size
+        self.light_radius = int(TILE_SIZE * 2.5)    # 175 at 70 tile size
+        self.soft_radius  = int(TILE_SIZE * 2.8)    # 196 at 70 tile size
 
         # ── Camera shake ────────────────────────────────────────────────
         self.shake = 0
-        self.shake_intensity = 2
+        self.shake_intensity = 3
 
     # ────────────────────────────────────────────────────────────────────────
 
     def update(self, player_wx: float, player_wy: float, ts: int):
+        """
+        Enhanced camera update with smooth easing and proper bounds checking.
+        """
 
         half = ts * 0.5
 
-        # ── horizontal ───────────────────────────────────────────────
+        # ── Calculate target position (centered on player) ─────────────
         if self.world_w > VP_W:
-            target_x = player_wx + half - VP_W * 0.5
-            self.cam_x = max(0.0, min(target_x, self.world_w - VP_W))
+            self.target_x = player_wx + half - VP_W * 0.5
+            self.target_x = max(0.0, min(self.target_x, self.world_w - VP_W))
         else:
-            self.cam_x = 0.0
+            self.target_x = 0.0
 
-        # ── vertical ─────────────────────────────────────────────────
         if self.world_h > VP_H:
-            target_y = player_wy + half - VP_H * 0.5
-            self.cam_y = max(0.0, min(target_y, self.world_h - VP_H))
+            self.target_y = player_wy + half - VP_H * 0.5
+            self.target_y = max(0.0, min(self.target_y, self.world_h - VP_H))
         else:
-            self.cam_y = 0.0
+            self.target_y = 0.0
 
-        # ── screen shake decay ────────────────────────────────────────
+        # ── Smooth easing to target (exponential smoothing) ────────────
+        self.cam_x = self.cam_x + (self.target_x - self.cam_x) * self.easing_factor
+        self.cam_y = self.cam_y + (self.target_y - self.cam_y) * self.easing_factor
+
+        # ── Screen shake decay ────────────────────────────────────────
         if self.shake > 0:
             self.shake -= 1
 
     # ────────────────────────────────────────────────────────────────────────
 
     def world_to_screen(self, wx: float, wy: float):
+        """Convert world coordinates to screen coordinates."""
         sx = wx - self.cam_x + self._mx + VP_LEFT
         sy = wy - self.cam_y + self._my + VP_TOP
 
@@ -82,13 +97,17 @@ class Camera:
         screen.blit(world_surface, (bx, by))
 
     # ────────────────────────────────────────────────────────────────────────
-    # 🔥 LIGHTING SYSTEM (Fog of War)
+    # 🔥 LIGHTING SYSTEM (Fog of War) - Improved gradient
     # ────────────────────────────────────────────────────────────────────────
 
     def apply_lighting(self, screen: pygame.Surface, player_screen_pos: tuple):
+        """
+        Apply smooth lighting and fog of war effect around the player.
+        Uses radial gradient for better visual quality.
+        """
 
         # full darkness layer
-        self.darkness.fill((0, 0, 0, 230))
+        self.darkness.fill((0, 0, 0, 240))
 
         px, py = player_screen_pos
 
@@ -100,13 +119,17 @@ class Camera:
             self.light_radius
         )
 
-        # soft fade outer glow (less harsh edge)
-        pygame.draw.circle(
-            self.darkness,
-            (0, 0, 0, 120),
-            (px, py),
-            self.soft_radius
-        )
+        # intermediate fade (smoother transition)
+        fade_steps = 5
+        for i in range(fade_steps, 0, -1):
+            radius = self.light_radius + (self.soft_radius - self.light_radius) * (i / fade_steps)
+            alpha = int(100 * (i / fade_steps))
+            pygame.draw.circle(
+                self.darkness,
+                (0, 0, 0, alpha),
+                (px, py),
+                int(radius)
+            )
 
         screen.blit(self.darkness, (0, 0))
 
