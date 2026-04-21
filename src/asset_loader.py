@@ -81,9 +81,9 @@ class Assets:
         self.pause_btn = load_image("PauseButton.png", size=(38, 38))
 
         # ── Full-screen screen backgrounds ────────────────────────────────────
-        self.start_menu = load_image("start menu.png", size=full, alpha=False)
+        self.start_menu = load_image("start menu2.png", size=full, alpha=False)
         self.pause_bg   = load_image("pause.png",      size=full, alpha=False)
-        self.win_bg     = load_image("win.png",        size=full, alpha=False)
-        self.lose_bg    = load_image("LOSE.png",       size=full, alpha=False)
+        self.win_bg     = load_image("win2.png",        size=full, alpha=False)
+        self.lose_bg    = load_image("LOSE2.png",       size=full, alpha=False)
 
         print("[AssetLoader] ✓ All assets loaded successfully.")

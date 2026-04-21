@@ -18,8 +18,8 @@ MAZE_W     = COLS * TILE_SIZE   # 1050 px
 MAZE_H     = ROWS * TILE_SIZE   # 1050 px
 MAZE_OFF_X = 75           # horizontal padding around the maze
 MAZE_OFF_Y = 100          # top bar height (used for HUD)
-SCREEN_W   = MAZE_W + 2 * MAZE_OFF_X   # 1200 px
-SCREEN_H   = MAZE_H + MAZE_OFF_Y + 40  # 1190 px
+SCREEN_W = MAZE_W + 2 * MAZE_OFF_X - 200
+SCREEN_H = MAZE_H + MAZE_OFF_Y - 500
 FPS        = 60
 
 # ─── Colours ──────────────────────────────────────────────────────────────────

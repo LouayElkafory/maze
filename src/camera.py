@@ -109,7 +109,8 @@ class Camera:
         # full darkness layer
         self.darkness.fill((0, 0, 0, 240))
 
-        px, py = player_screen_pos
+        px = player_screen_pos[0]
+        py = player_screen_pos[1] - MAZE_OFF_Y-10
 
         # inner bright circle (clear vision)
         pygame.draw.circle(
@@ -131,7 +132,7 @@ class Camera:
                 int(radius)
             )
 
-        screen.blit(self.darkness, (0, 0))
+        screen.blit(self.darkness, (0, MAZE_OFF_Y-10))
 
     # ────────────────────────────────────────────────────────────────────────
 
