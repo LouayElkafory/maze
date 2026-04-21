@@ -90,7 +90,11 @@ class Game:
         cfg = self.cfg
         self.maze   = Maze(self.assets, cfg)
         self.player = Player(self.assets, cfg)
-        self.enemy  = Enemy(self.assets, cfg, level=self.level)
+        
+        # Multiple enemy support: add a second enemy if level >= 4
+        self.enemies = [Enemy(self.assets, cfg, level=self.level)]
+        if self.level >= 4:
+            self.enemies.append(Enemy(self.assets, cfg, level=self.level, start_pos=cfg.enemy_start_2))
 
         # Screen dimensions of the entire world (maze)
         self.world_w = cfg.cols * cfg.tile_size
@@ -283,7 +287,8 @@ class Game:
 
         # Move entities (smooth world pixel interpolation)
         self.player.update()
-        self.enemy.update(self.maze, self.player.grid_pos)
+        for enemy in self.enemies:
+            enemy.update(self.maze, self.player.grid_pos)
 
         # Update camera based on new player smooth position
         self.camera.update(self.player.px, self.player.py, self.cfg.tile_size)
@@ -294,10 +299,12 @@ class Game:
             self.audio.play_win()
             return
 
-        # ── Lose: enemy caught the player ─────────────────────────────────────
-        if self.enemy.grid_pos == self.player.grid_pos:
-            self.state = STATE_LOSE
-            self.audio.play_lose()
+        # ── Lose: any enemy caught the player ────────────────────────────────
+        for enemy in self.enemies:
+            if enemy.grid_pos == self.player.grid_pos:
+                self.state = STATE_LOSE
+                self.audio.play_lose()
+                break
 
     # ─────────────────────────────────────────────────────────────────────────
     # Drawing
@@ -311,7 +318,8 @@ class Game:
         tx, ty = self.camera.world_to_screen(self._tx, self._ty)
         self.screen.blit(self._treasure_sprite, (tx, ty))
 
-        self.enemy.draw(self.screen, self.camera)
+        for enemy in self.enemies:
+            enemy.draw(self.screen, self.camera)
         self.player.draw(self.screen, self.camera)
 
         self.hud.draw(self.screen, self._elapsed, self.level)
