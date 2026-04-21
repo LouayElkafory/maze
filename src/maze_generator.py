@@ -103,6 +103,8 @@ class MazeConfig:
         self.off_x = 0
         self.off_y = 0
 
-        self.player_start = _nearest_open(self.grid, 1, 1)
-        self.enemy_start  = _nearest_open(self.grid, g // 2, g // 2)
-        self.treasure_pos = _nearest_open(self.grid, g - 2, g - 2)
+        # Key positions (all guaranteed to be open cells)
+        self.player_start  = _nearest_open(self.grid, 1, 1)
+        self.enemy_start   = _nearest_open(self.grid, g // 2, g // 2)
+        self.enemy_start_2 = _nearest_open(self.grid, 1, g - 2)
+        self.treasure_pos  = _nearest_open(self.grid, g - 2, g - 2)

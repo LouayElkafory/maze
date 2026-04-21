@@ -25,17 +25,20 @@ class Enemy:
 
     LERP_SPEED = 0.20
 
-    def __init__(self, assets, cfg, level: int = 1):
+    def __init__(self, assets, cfg, level: int = 1, start_pos: tuple = None):
         self.assets = assets
-        self._apply_cfg(cfg, level)
+        self._apply_cfg(cfg, level, start_pos)
 
     # ── Config application ────────────────────────────────────────────────────
 
-    def _apply_cfg(self, cfg, level: int):
+    def _apply_cfg(self, cfg, level: int, start_pos: tuple = None):
         self.tile_size = cfg.tile_size
         self.cols      = cfg.cols
         self.rows      = cfg.rows
-        self.col, self.row = cfg.enemy_start
+
+        # Use provided start_pos or default to cfg.enemy_start
+        self.col, self.row = start_pos if start_pos else cfg.enemy_start
+
         self.direction     = "down"
         self.path: list    = []
 
@@ -61,8 +64,8 @@ class Enemy:
 
     # ── Public API ────────────────────────────────────────────────────────────
 
-    def reset(self, cfg, level: int = 1):
-        self._apply_cfg(cfg, level)
+    def reset(self, cfg, level: int = 1, start_pos: tuple = None):
+        self._apply_cfg(cfg, level, start_pos)
 
     def update(self, maze, player_pos: tuple):
         """Called once per frame while PLAYING."""
