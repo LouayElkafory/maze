@@ -34,16 +34,33 @@ class Camera:
         # ── Camera easing (smoother follow) ────────────────────────────
         self.easing_factor = 0.10  # Lower = smoother follow (0.05-0.15)
 
-        # ── Lighting system (Fog of War) - scaled for bigger tiles ─────
+        # ── Lighting system (Fog of War) - radii set via set_difficulty ─
         self.darkness = pygame.Surface((VP_W, VP_H), pygame.SRCALPHA)
 
-        # Scale lighting radii with tile size
-        self.light_radius = int(TILE_SIZE * 2.5)    # 175 at 70 tile size
-        self.soft_radius  = int(TILE_SIZE * 2.8)    # 196 at 70 tile size
+        self.light_radius = 0
+        self.soft_radius  = 0
+        self.set_difficulty(1)  # القيمة الافتراضية
 
         # ── Camera shake ────────────────────────────────────────────────
         self.shake = 0
         self.shake_intensity = 3
+
+    # ────────────────────────────────────────────────────────────────────────
+    # 📈 DIFFICULTY SCALING
+    # ────────────────────────────────────────────────────────────────────────
+
+    def set_difficulty(self, level: int):
+        """
+        تغيير حجم الكشاف بناءً على الليفل.
+        multiplier بيبدأ من 2.5 ويقل تدريجياً كلما زاد الليفل.
+        """
+        multiplier = max(1.0, 2.5 - (level - 1) * 0.3)
+
+        self.light_radius = int(TILE_SIZE * multiplier)
+        self.soft_radius  = int(TILE_SIZE * (multiplier + 0.3))
+
+        # شدة الهزة الأساسية تزيد مع الليفل
+        self.base_shake_intensity = 3 + (level // 2)
 
     # ────────────────────────────────────────────────────────────────────────
 
@@ -97,7 +114,7 @@ class Camera:
         screen.blit(world_surface, (bx, by))
 
     # ────────────────────────────────────────────────────────────────────────
-    # 🔥 LIGHTING SYSTEM (Fog of War) - Improved gradient
+    # 🔥 LIGHTING SYSTEM (Fog of War) - Improved gradient + centered on player
     # ────────────────────────────────────────────────────────────────────────
 
     def apply_lighting(self, screen: pygame.Surface, player_screen_pos: tuple):
@@ -109,14 +126,15 @@ class Camera:
         # full darkness layer
         self.darkness.fill((0, 0, 0, 240))
 
-        px = player_screen_pos[0]
-        py = player_screen_pos[1] - MAZE_OFF_Y-10
+        # السنتر الحقيقي للاعب (مع تعويض نصف الـ tile لتمركز الضوء)
+        center_x = player_screen_pos[0] + (TILE_SIZE // 2)
+        center_y = player_screen_pos[1] - (MAZE_OFF_Y - 10) + (TILE_SIZE // 2)
 
         # inner bright circle (clear vision)
         pygame.draw.circle(
             self.darkness,
             (0, 0, 0, 0),
-            (px, py),
+            (center_x, center_y),
             self.light_radius
         )
 
@@ -124,23 +142,26 @@ class Camera:
         fade_steps = 5
         for i in range(fade_steps, 0, -1):
             radius = self.light_radius + (self.soft_radius - self.light_radius) * (i / fade_steps)
-            alpha = int(100 * (i / fade_steps))
+            alpha  = int(100 * (i / fade_steps))
             pygame.draw.circle(
                 self.darkness,
                 (0, 0, 0, alpha),
-                (px, py),
+                (center_x, center_y),
                 int(radius)
             )
 
-        screen.blit(self.darkness, (0, MAZE_OFF_Y-10))
+        screen.blit(self.darkness, (0, MAZE_OFF_Y - 10))
 
     # ────────────────────────────────────────────────────────────────────────
 
-    def trigger_shake(self, intensity: int = 10):
+    def trigger_shake(self, intensity: int):
         """
-        Call this from enemy when it gets close to player.
+        يتم استدعاؤها من game.py عند اقتراب العدو.
+        intensity: القيمة المحسوبة بناءً على المسافة والليفل.
         """
-        self.shake = intensity
+        # بنحدث الشدة وبنشغل الـ "Timer" بتاع الهزة
+        self.shake_intensity = intensity
+        self.shake = 10  # مدة الهزة بالفريمات
 
     # ────────────────────────────────────────────────────────────────────────
 

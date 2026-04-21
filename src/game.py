@@ -17,6 +17,7 @@ State flow:
                           └──[Menu]──►  MENU
 """
 import time
+import math  # لحساب المسافات (Panic System)
 from typing import Optional
 import pygame
 from src.constants import (
@@ -90,7 +91,7 @@ class Game:
         cfg = self.cfg
         self.maze   = Maze(self.assets, cfg)
         self.player = Player(self.assets, cfg)
-        
+
         # Multiple enemy support: add a second enemy if level >= 4
         self.enemies = [Enemy(self.assets, cfg, level=self.level)]
         if self.level >= 4:
@@ -100,6 +101,9 @@ class Game:
         self.world_w = cfg.cols * cfg.tile_size
         self.world_h = cfg.rows * cfg.tile_size
         self.camera  = Camera(self.world_w, self.world_h)
+
+        # ربط صعوبة الكشاف (fog radius) بالليفل الحالي
+        self.camera.set_difficulty(self.level)
 
         # Treasure rendering cache (world coordinates + scaled sprite)
         ts = cfg.tile_size
@@ -292,6 +296,21 @@ class Game:
 
         # Update camera based on new player smooth position
         self.camera.update(self.player.px, self.player.py, self.cfg.tile_size)
+
+        # ── Panic System: Screen Shake when enemy is close ────────────────────
+        # الاهتزاز يبدأ لما أي مومياء تقرب لمسافة 4 مربعات من اللاعب
+        panic_dist = self.cfg.tile_size * 4
+        max_panic  = 0
+
+        for enemy in self.enemies:
+            d = math.hypot(enemy.px - self.player.px, enemy.py - self.player.py)
+            if d < panic_dist:
+                # شدة الهزة بتزيد كلما قلت المسافة (معادلة ناعمة مرتبطة بالليفل)
+                intensity = (1 - (d / panic_dist)) * (self.level + 2)
+                max_panic = max(max_panic, intensity)
+
+        if max_panic > 0:
+            self.camera.trigger_shake(int(max_panic))
 
         # ── Win: player reached the treasure ──────────────────────────────────
         if self.player.grid_pos == self.cfg.treasure_pos:
