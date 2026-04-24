@@ -273,8 +273,8 @@ You are free to use, modify, and distribute this project for personal and commer
 
 ## 👤 Author
 
-Louay Mohamed
-Lama Diaa
+Louay Mohamed,
+Lama Diaa,
 Sohila Ihab
 
 ## 🙏 Acknowledgments
