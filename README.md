@@ -24,7 +24,7 @@ A modern, modular maze chase game built with **Python** and **Pygame**. Navigate
 
 | Player | Mummy |
 | :---: | :---: |
-| <img src="assets/player down.png" width="100"/> | <img src="assets/mummy.png" width="100"/> |
+| <img src="assets/player go right.png" width="100"/> | <img src="assets/mummy.png" width="100"/> |
 
 
 📸 **Full screenshots available in `assets/` folder**
