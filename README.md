@@ -15,28 +15,10 @@ A modern, modular maze chase game built with **Python** and **Pygame**. Navigate
 ## 🎮 Demo / Screenshots
 
 ```
-┌─ Main Menu ─────────────────────────────────┐
-│ ⚱ CURSE OF THE PYRAMIDS                    │
-│                                             │
-│           [ Play ]    [ Settings ]          │
-│                                             │
-└─────────────────────────────────────────────┘
-
-┌─ Gameplay (Level 3) ────────────────────────┐
-│ Level: 3 | Health: ██████░░░░ | Score: 1250 │
-│                                             │
-│   ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓         │
-│   ▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▓         │
-│   ▓░▒░░░░░░░░░░░░░░░░░░░░░░░░░░░▓         │
-│   ▓░░░░░░░░░░░☺░░░░░░░░░░░░░░░░░▓         │
-│   ▓░░░░░░░░░░░░░░░░░░░░░☻░░░░░░░▓         │
-│   ▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▓         │
-│   ▓░░░░░░░░░░░░░░░░░░░░░░░░░♦░░░▓         │
-│   ▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▓         │
-│   ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓         │
-│                                             │
-│ ☺ = Player | ☻ = Mummy | ♦ = Treasure     │
-└─────────────────────────────────────────────┘
+![Game Screenshot](assets/Test1.png)
+![Game Screenshot](assets/test2.png)
+![Game Screenshot](assets/test3.png)
+![Game Screenshot](assets/test4.png)
 ```
 
 📸 **Full screenshots available in `assets/` folder**
