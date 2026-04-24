@@ -222,12 +222,6 @@ Each level applies cumulative tuning:
 - [ ] **Lives/Health System** — Multiple hit points instead of instant lose
 - [ ] **Leaderboard** — High score tracking and persistence
 - [ ] **Difficulty Settings** — Easy/Normal/Hard modes with adjusted parameters
-- [ ] **Level Editor** — User-created custom mazes
-- [ ] **Multiplayer Mode** — Co-op or competitive local play
-- [ ] **Mobile Port** — Touch controls and responsive UI
-- [ ] **Sound Settings** — Volume sliders, mute option
-- [ ] **Achievements** — Badges for completing challenges
-- [ ] **Particle Effects** — Visual enhancements for events (win, damage, etc.)
 
 ---
 
