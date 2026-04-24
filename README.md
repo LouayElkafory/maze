@@ -15,9 +15,9 @@ A modern, modular maze chase game built with **Python** and **Pygame**. Navigate
 ## 🎮 Demo / Screenshots
 
 ![Game Screenshot](assets/Test1.PNG)
-![Game Screenshot](assets/test2.png)
-![Game Screenshot](assets/test3.png)
-![Game Screenshot](assets/test4.png)
+![Game Screenshot](assets/test2.PNG)
+![Game Screenshot](assets/test3.PNG)
+![Game Screenshot](assets/test4.PNG)
 
 
 📸 **Full screenshots available in `assets/` folder**
