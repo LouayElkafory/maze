@@ -12,12 +12,19 @@ A modern, modular maze chase game built with **Python** and **Pygame**. Navigate
 
 ---
 
-## 🎮 Demo / Screenshots
+## 🎮 / Screenshots
 
-![Game Screenshot](assets/Test1.PNG)
-![Game Screenshot](assets/test2.PNG)
-![Game Screenshot](assets/test3.PNG)
-![Game Screenshot](assets/test4.PNG)
+
+
+| Test 1 | Test 2 | Test 3 | Test 4 |
+| :---: | :---: | :---: | :---: |
+| <img src="assets/Test1.PNG" width="200"/> | <img src="assets/test2.PNG" width="200"/> | <img src="assets/test3.PNG" width="200"/> | <img src="assets/test4.PNG" width="200"/> |
+
+### Character Assets
+
+| Player | Mummy |
+| :---: | :---: |
+| <img src="assets/player down.png" width="100"/> | <img src="assets/mummy.png" width="100"/> |
 
 
 📸 **Full screenshots available in `assets/` folder**
